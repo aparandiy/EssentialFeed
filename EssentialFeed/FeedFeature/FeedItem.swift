@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+///Simple feed model
 struct FeedItem {
     let id: UUID
     let description: String?
