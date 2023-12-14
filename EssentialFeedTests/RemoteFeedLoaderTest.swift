@@ -7,39 +7,65 @@
 
 import XCTest
 class RemoteFeedLoader {
+    let client: HTTPClient
+    
+    init(client: HTTPClient) {
+        self.client = client
+    }
+    
     func load() {
-        HTTPClient.shared.get(from: URL(string: "https://url.com")!)
+        client.get(from: URL(string: "https://url.com")!)
     }
 }
 
-class HTTPClient {
-    ///this is a private init which prevents HTTPClient fo being created by someone more than once, so if someone needs a HTTPClient he can call anly a shared property and can't use let client = HTTPClient(). this is a real singletone "S"
-//    static let shared = HTTPClient()
-//    private init() {}
-    
-    
-    ///this is not a singlton, because static var an opportunity to create a new instance with HTTPClient() and override the current static shared instance like
-    ///let newClient = HTTPClient()
-    ///HTTPClient.shared = newClient
-    static var shared = HTTPClient()
-    
-    func get(from url: URL) { }
+//class HTTPClient {
+//    ///this is a private init which prevents HTTPClient fo being created by someone more than once, so if someone needs a HTTPClient he can call anly a shared property and can't use let client = HTTPClient(). this is a real singletone "S"
+////    static let shared = HTTPClient()
+////    private init() {}
+//
+//
+//    ///this is not a singlton, because static var an opportunity to create a new instance with HTTPClient() and override the current static shared instance like
+//    ///let newClient = HTTPClient()
+//    ///HTTPClient.shared = newClient
+////    static var shared = HTTPClient()
+//
+//    func get(from url: URL) { }
+//}
+//
+//class HTTPClientSpy: HTTPClient {
+//    override func get(from url: URL) {
+//        requestedURL = url
+//    }
+//
+//    var requestedURL: URL?
+//}
+
+
+//Instead of using the class HTTPClient we can use a protocol HTTPClient, because it's just an abstaction, so who ever want the use HTTPSClien - he is responsable for implemetion of this protocol, this is a dependecy inversion
+protocol HTTPClient {
+    func get(from url: URL)
 }
 
 class HTTPClientSpy: HTTPClient {
-    override func get(from url: URL) {
+    //MARK: - Properties
+    var requestedURL: URL?
+
+    //MARK: HTTPClient
+    func get(from url: URL) {
         requestedURL = url
     }
-    
-    var requestedURL: URL?
 }
 
 class RemoteFeedLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
         let client = HTTPClientSpy()
-        HTTPClient.shared = client
-        let _ = RemoteFeedLoader()
+        ///static var instance of shared HTTPClient object gives us an opportunity to rewrite it with a subclass wich is our HTTPSClientSpy
+//        HTTPClient.shared = client
+//        let _ = RemoteFeedLoader()
+        
+        ///Instead fo using a shared instance(singletone) we decided to make a constrcutor injection, so now RemoteFeedLoader can beconly initialized with the client, so who ever creates the RemoteFeedLoader needs to pass a client to it let _ = RemoteFeedLoader(client: client)
+        let _ = RemoteFeedLoader(client: client)
         
         XCTAssertNil(client.requestedURL)
     }
@@ -47,8 +73,11 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_requestDataFromURL() {
         let client = HTTPClientSpy()
         ///static var instance of shared HTTPClient object gives us an opportunity to rewrite it with a subclass wich is our HTTPSClientSpy
-        HTTPClient.shared = client
-        let sut = RemoteFeedLoader()
+//        HTTPClient.shared = client
+//        let sut = RemoteFeedLoader()
+        
+        ///Instead fo using a shared instance(singletone) we decided to make a constrcutor injection, so now RemoteFeedLoader can beconly initialized with the client, so who ever creates the RemoteFeedLoader needs to pass a client to it let _ = RemoteFeedLoader(client: client)
+        let sut = RemoteFeedLoader(client: client)
         sut.load()
         
         XCTAssertNotNil(client.requestedURL)
