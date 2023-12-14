@@ -48,41 +48,36 @@ protocol HTTPClient {
     func get(from url: URL)
 }
 
-class HTTPClientSpy: HTTPClient {
-    //MARK: - Properties
-    var requestedURL: URL?
-
-    //MARK: HTTPClient
-    func get(from url: URL) {
-        requestedURL = url
-    }
-}
-
 class RemoteFeedLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
-        let client = HTTPClientSpy()
-        ///static var instance of shared HTTPClient object gives us an opportunity to rewrite it with a subclass wich is our HTTPSClientSpy
-//        HTTPClient.shared = client
-//        let _ = RemoteFeedLoader()
-        
-        ///Instead fo using a shared instance(singletone) we decided to make a constrcutor injection, so now RemoteFeedLoader can beconly initialized with the client, so who ever creates the RemoteFeedLoader needs to pass a client to it let _ = RemoteFeedLoader(client: client)
-        let _ = RemoteFeedLoader(client: client, url: URL(string: "https://url.com")!)
-        
+        let (_, client) = makeSUT()
         XCTAssertNil(client.requestedURL)
     }
     
     func test_load_requestDataFromURL() {
-        let url = URL(string: "test")!
-        let client = HTTPClientSpy()
-        ///static var instance of shared HTTPClient object gives us an opportunity to rewrite it with a subclass wich is our HTTPSClientSpy
-//        HTTPClient.shared = client
-//        let sut = RemoteFeedLoader()
-        
-        ///Instead fo using a shared instance(singletone) we decided to make a constrcutor injection, so now RemoteFeedLoader can beconly initialized with the client, so who ever creates the RemoteFeedLoader needs to pass a client to it let _ = RemoteFeedLoader(client: client)
-        let sut = RemoteFeedLoader(client: client, url: url)
+        let url = URL(string: "test2")!
+        let (sut, client) = makeSUT(url: url)
         sut.load()
         
         XCTAssertEqual(client.requestedURL, url)
     }
+    
+    //MARK: - Helpers
+    private func makeSUT(url: URL = URL(string: "test")!) -> (RemoteFeedLoader, HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = RemoteFeedLoader(client: client, url: url)
+        return (sut, client)
+    }
+    
+    private class HTTPClientSpy: HTTPClient {// this is a class just for test, we are not using it somewhere else, so we moved it to the test scope and made it private
+        //MARK: - Properties
+        var requestedURL: URL?
+
+        //MARK: HTTPClient
+        func get(from url: URL) {
+            requestedURL = url
+        }
+    }
+
 }
