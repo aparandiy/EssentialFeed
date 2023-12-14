@@ -8,13 +8,15 @@
 import XCTest
 class RemoteFeedLoader {
     let client: HTTPClient
+    let url: URL
     
-    init(client: HTTPClient) {
+    init(client: HTTPClient, url: URL) {
         self.client = client
+        self.url = url
     }
     
     func load() {
-        client.get(from: URL(string: "https://url.com")!)
+        client.get(from: url)
     }
 }
 
@@ -65,21 +67,22 @@ class RemoteFeedLoaderTests: XCTestCase {
 //        let _ = RemoteFeedLoader()
         
         ///Instead fo using a shared instance(singletone) we decided to make a constrcutor injection, so now RemoteFeedLoader can beconly initialized with the client, so who ever creates the RemoteFeedLoader needs to pass a client to it let _ = RemoteFeedLoader(client: client)
-        let _ = RemoteFeedLoader(client: client)
+        let _ = RemoteFeedLoader(client: client, url: URL(string: "https://url.com")!)
         
         XCTAssertNil(client.requestedURL)
     }
     
     func test_load_requestDataFromURL() {
+        let url = URL(string: "test")!
         let client = HTTPClientSpy()
         ///static var instance of shared HTTPClient object gives us an opportunity to rewrite it with a subclass wich is our HTTPSClientSpy
 //        HTTPClient.shared = client
 //        let sut = RemoteFeedLoader()
         
         ///Instead fo using a shared instance(singletone) we decided to make a constrcutor injection, so now RemoteFeedLoader can beconly initialized with the client, so who ever creates the RemoteFeedLoader needs to pass a client to it let _ = RemoteFeedLoader(client: client)
-        let sut = RemoteFeedLoader(client: client)
+        let sut = RemoteFeedLoader(client: client, url: url)
         sut.load()
         
-        XCTAssertNotNil(client.requestedURL)
+        XCTAssertEqual(client.requestedURL, url)
     }
 }
