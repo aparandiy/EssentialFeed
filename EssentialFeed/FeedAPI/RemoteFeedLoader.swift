@@ -17,6 +17,7 @@ public final class RemoteFeedLoader {//final tag prevents of subclassing of this
     
     public enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     public init(client: HTTPClient, url: URL) {
