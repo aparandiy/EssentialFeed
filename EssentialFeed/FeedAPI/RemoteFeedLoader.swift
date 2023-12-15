@@ -6,9 +6,12 @@
 //
 
 import Foundation
-
+public enum HTTPClientresult {
+    case success(HTTPURLResponse)
+    case failure(Error)
+}
 public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (Error?, HTTPURLResponse?) -> Void)
+    func get(from url: URL, completion: @escaping (HTTPClientresult) -> Void)
 }
 
 public final class RemoteFeedLoader {//final tag prevents of subclassing of this class, so nobody can be a subclass of the  RemoteFeedLoader
@@ -26,10 +29,12 @@ public final class RemoteFeedLoader {//final tag prevents of subclassing of this
     }
     
     public func load(completion: @escaping (Error) ->()) {
-        client.get(from: url) { error, response in
-            if response != nil {
+        client.get(from: url) { result in
+            
+            switch result {
+            case .success:
                 completion(.invalidData)
-            } else {
+            case .failure:
                 completion(.connectivity)
             }
         }
