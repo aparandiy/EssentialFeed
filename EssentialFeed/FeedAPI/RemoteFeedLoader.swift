@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (Error) -> Void)
+    func get(from url: URL, completion: @escaping (Error?, HTTPURLResponse?) -> Void)
 }
 
 public final class RemoteFeedLoader {//final tag prevents of subclassing of this class, so nobody can be a subclass of the  RemoteFeedLoader
@@ -26,8 +26,12 @@ public final class RemoteFeedLoader {//final tag prevents of subclassing of this
     }
     
     public func load(completion: @escaping (Error) ->()) {
-        client.get(from: url) { error in
-            completion(.connectivity)
+        client.get(from: url) { error, response in
+            if response != nil {
+                completion(.invalidData)
+            } else {
+                completion(.connectivity)
+            }
         }
     }
 }
