@@ -17,7 +17,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_requestsDataFromURL() {
-        let url = URL(string: "test2")!
+        let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         sut.load { _ in }
         
@@ -25,7 +25,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_loadTwice_requestDataFromURLTwice(){
-        let url = URL(string: "test2")!
+        let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         sut.load { _ in }
         sut.load { _ in }
@@ -67,7 +67,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: .success([])) {
-            let emptyJson = Data("{ \"items\" : [] }".utf8)
+            let emptyJson = Data("{\"items\": []}".utf8)
             client.complete(withStatusCode: 200, data: emptyJson)
         }
     }
@@ -75,24 +75,24 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_deliversItemsOn200HTTPResponseWithJsonItems(){
         let (sut, client) = makeSUT()
         
-        let (item1, item1Json) = makeItem(id: UUID(),
+        let item1 = makeItem(id: UUID(),
                              imageURL: URL(string: "http://a-url.com")!)
         
-        let (item2, item2Json) = makeItem(id: UUID(),
+        let item2 = makeItem(id: UUID(),
                              description: "a description",
                              location: "a location",
                              imageURL: URL(string: "http://another-url.com")!)
         
-        let items = [item1, item2]
+        let items = [item1.model, item2.model]
         
         expect(sut, toCompleteWith: .success(items)) {
-            let json = makeItemsJson([item1Json, item2Json])
+            let json = makeItemsJson([item1.json, item2.json])
             client.complete(withStatusCode: 200, data: json)
         }
     }
     
     //MARK: - Helpers
-    private func makeSUT(url: URL = URL(string: "test")!) -> (RemoteFeedLoader, HTTPClientSpy) {
+    private func makeSUT(url: URL = URL(string: "https://a-url.com")!) -> (RemoteFeedLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(client: client, url: url)
         return (sut, client)
@@ -143,14 +143,14 @@ class RemoteFeedLoaderTests: XCTestCase {
         
     private class HTTPClientSpy: HTTPClient {// this is a class just for test, we are not using it somewhere else, so we moved it to the test scope and made it private
         //MARK: - Properties
-        private var messages: [(url: URL, completion: (HTTPClientresult)-> Void)] = []
-        
+        private var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+
         var requestedURLs: [URL] {
-            return messages.map({$0.url})
+            return messages.map{$0.url}
         }
         
         //MARK: HTTPClient
-        func get(from url: URL, completion: @escaping (HTTPClientresult) -> Void) {
+        func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
             messages.append((url, completion))
         }
         
@@ -159,8 +159,13 @@ class RemoteFeedLoaderTests: XCTestCase {
         }
         
         func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
-            let response = HTTPURLResponse(url: requestedURLs[index], statusCode: code, httpVersion: nil, headerFields: nil)
-            messages[index].completion(.success(data, response!))
+            let response = HTTPURLResponse(
+                url: requestedURLs[index],
+                statusCode: code,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            messages[index].completion(.success(data, response))
         }
     }
 }
