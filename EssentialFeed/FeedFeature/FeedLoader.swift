@@ -7,12 +7,14 @@
 
 import Foundation
 
-enum LoadFeedResult {
+public enum LoadFeedResult<Error: Swift.Error>{
     case success([FeedItem])
     case failure(Error)
 }
 
+extension LoadFeedResult: Equatable where Error: Equatable { }
+
 ///this is an interface between UI module and concrete implementation of FeedLoader. It's like a guideline
 protocol FeedLoader {
-    func load(completion:@escaping (LoadFeedResult)->())
+    func load(completion:@escaping (LoadFeedResult<Error>)->())
 }
