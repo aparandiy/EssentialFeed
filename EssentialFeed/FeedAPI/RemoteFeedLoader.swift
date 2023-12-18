@@ -32,7 +32,7 @@ public final class RemoteFeedLoader {//final tag prevents of subclassing of this
             switch result {
             case let .success(data, response):
                 do {
-                    let items = try FeedItemsMaper.map(data, response)
+                    let items = try FeedItemsMapper.map(data, response)
                     completion(.success(items))
                 } catch {
                     completion(.failure(.invalidData))
@@ -41,34 +41,6 @@ public final class RemoteFeedLoader {//final tag prevents of subclassing of this
                 completion(.failure(.connectivity))
             }
         }
-    }
-}
-
-class FeedItemsMaper {
-    
-    private struct Root: Decodable {
-        let items: [Item]
-    }
-
-    private struct Item: Decodable {
-        let id: UUID
-        let description: String?
-        let location: String?
-        let image: URL
-        
-        var item: FeedItem {
-            return FeedItem(id: id, description: description, location: location, imageURL: image)
-        }
-    }
-    
-    static var OK_200: Int { return 200 }
-    
-    static func map(_ data: Data, _ response: HTTPURLResponse) throws -> [FeedItem] {
-        guard response.statusCode == 200 else {
-            throw RemoteFeedLoader.Error.invalidData
-        }
-        let root = try JSONDecoder().decode(Root.self, from: data)
-        return  root.items.map({$0.item})
     }
 }
 
