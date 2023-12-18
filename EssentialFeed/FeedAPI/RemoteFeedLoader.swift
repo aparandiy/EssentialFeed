@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class RemoteFeedLoader {//final tag prevents of subclassing of this class, so nobody can be a subclass of the  RemoteFeedLoader
+public final class RemoteFeedLoader: FeedLoader {//final tag prevents of subclassing of this class, so nobody can be a subclass of the  RemoteFeedLoader
     let client: HTTPClient
     let url: URL
     
@@ -23,6 +23,7 @@ public final class RemoteFeedLoader {//final tag prevents of subclassing of this
         self.url = url
     }
     
+    //MARK: - FeedLoader
     public func load(completion: @escaping (Result) ->()) {
         client.get(from: url) { [weak self] result in
             guard self != nil else { return }

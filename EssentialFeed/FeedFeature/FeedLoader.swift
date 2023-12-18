@@ -16,5 +16,6 @@ extension LoadFeedResult: Equatable where Error: Equatable { }
 
 ///this is an interface between UI module and concrete implementation of FeedLoader. It's like a guideline
 protocol FeedLoader {
+    associatedtype Error: Swift.Error
     func load(completion:@escaping (LoadFeedResult<Error>)->())
 }
