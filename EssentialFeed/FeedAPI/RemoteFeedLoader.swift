@@ -27,23 +27,13 @@ public final class RemoteFeedLoader {//final tag prevents of subclassing of this
     }
     
     public func load(completion: @escaping (Result) ->()) {
-        client.get(from: url) { [weak self] result in
-            guard let weakSelf = self else { return }
+        client.get(from: url) { result in
             switch result {
             case let .success(data, response):
-                completion(weakSelf.map(data, response))
+                completion(FeedItemsMapper.map(data, response))
             case .failure:
                 completion(.failure(.connectivity))
             }
-        }
-    }
-    
-    private func map(_ data: Data, _ response: HTTPURLResponse) -> Result {
-        do {
-            let items = try FeedItemsMapper.map(data, response)
-            return .success(items)
-        } catch {
-            return .failure(.invalidData)
         }
     }
 }
