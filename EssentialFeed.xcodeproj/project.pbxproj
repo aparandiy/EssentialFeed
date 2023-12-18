@@ -93,10 +93,18 @@
 		B731C78A2B2B582A002E44F2 /* EssentialFeedTests */ = {
 			isa = PBXGroup;
 			children = (
-				B7BDFD8F2B2B633C00879A14 /* RemoteFeedLoaderTest.swift */,
+				B7B2D05D2B303D5B00C0E366 /* FeedAPI */,
 				B7BDFD8E2B2B633C00879A14 /* EssentialFeedTests-Bridging-Header.h */,
 			);
 			path = EssentialFeedTests;
+			sourceTree = "<group>";
+		};
+		B7B2D05D2B303D5B00C0E366 /* FeedAPI */ = {
+			isa = PBXGroup;
+			children = (
+				B7BDFD8F2B2B633C00879A14 /* RemoteFeedLoaderTest.swift */,
+			);
+			path = FeedAPI;
 			sourceTree = "<group>";
 		};
 		B7BDFD8D2B2B5E6F00879A14 /* FeedFeature */ = {
