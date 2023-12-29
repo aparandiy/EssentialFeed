@@ -9,7 +9,7 @@ import XCTest
 //@testable import EssentialFeed @testable tag gives access to all the internal classes of the module, since EssentialFeed is a sepatare EssentialFeed - RemoteFeedLoaderTests can't reach his not public classes
 import EssentialFeed
 
-class RemoteFeedLoaderTests: XCTestCase {
+class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
         let (_, client) = makeSUT()
