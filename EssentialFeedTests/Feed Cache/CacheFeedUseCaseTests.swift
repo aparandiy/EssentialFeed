@@ -8,11 +8,6 @@
 import XCTest
 import EssentialFeed
 
-enum Result {
-    case success
-    case failure(Error)
-}
-
 class CacheFeedUseCaseTests: XCTestCase {
     
     func test_init_doesNotMessageStoreUponCreation() {
@@ -84,7 +79,7 @@ class CacheFeedUseCaseTests: XCTestCase {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, curentDate: Date.init)
         
-        var receivedResults = [Error?]()
+        var receivedResults = [LocalFeedLoader.SaveResult]()
         sut?.save([uniqueItem()], completion: { error in
             receivedResults.append(error)
         })
@@ -98,7 +93,7 @@ class CacheFeedUseCaseTests: XCTestCase {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, curentDate: Date.init)
         
-        var receivedResults = [Error?]()
+        var receivedResults = [LocalFeedLoader.SaveResult]()
         sut?.save([uniqueItem()], completion: { error in
             receivedResults.append(error)
         })
