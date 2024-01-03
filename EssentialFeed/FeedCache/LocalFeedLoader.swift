@@ -36,8 +36,8 @@ public final class LocalFeedLoader {
         })
     }
     
-    public func load() {
-        store.retrive()
+    public func load(completion: @escaping (Error?) -> ()) {
+        store.retrive(completion: completion)
     }
 }
 
