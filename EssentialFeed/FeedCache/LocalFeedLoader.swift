@@ -8,32 +8,26 @@
 import Foundation
 
 private final class FeedCachePolocy {
-    private let curentDate: () -> Date
     private let calendar = Calendar(identifier: .gregorian)
     
-    public init(curentDate: @escaping () -> Date) {
-        self.curentDate = curentDate
-    }
-
     private var maxCacheAgeInDays: Int {
         return 7
     }
     
-    func validate(_ timestamp: Date) -> Bool {
+    func validate(_ timestamp: Date, against date: Date) -> Bool {
         guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else { return false }
-        return curentDate() < maxCacheAge
+        return date < maxCacheAge
     }
 }
 
 public final class LocalFeedLoader {
     private let store: FeedStore
     private let curentDate: () -> Date
-    private let cahcePolicy: FeedCachePolocy
+    private let cahcePolicy = FeedCachePolocy()
 
     public init(store: FeedStore, curentDate: @escaping () -> Date) {
         self.store = store
         self.curentDate = curentDate
-        self.cahcePolicy = FeedCachePolocy(curentDate: curentDate)
     }
 }
  
@@ -69,7 +63,7 @@ extension LocalFeedLoader: FeedLoader {
             case let .failure(error):
                 completion(.failure(error))
                 
-            case let .found(feed, timestamp) where self.cahcePolicy.validate(timestamp):
+            case let .found(feed, timestamp) where self.cahcePolicy.validate(timestamp, against: self.curentDate()):
                 completion(.success(feed.toModels()))
                 
             case .found, .empty:
@@ -88,7 +82,7 @@ extension LocalFeedLoader {
             case  .failure:
                 self.store.deleteCachedFeed { _ in}
                 
-            case let .found(_ , timestamp) where !self.cahcePolicy.cahcePolicy.validate(timestamp):
+            case let .found(_ , timestamp) where !self.cahcePolicy.validate(timestamp, against: self.curentDate()):
                 self.store.deleteCachedFeed { _ in}
 
             case .empty, .found: break
