@@ -7,22 +7,33 @@
 
 import Foundation
 
-public final class LocalFeedLoader {
-    private let store: FeedStore
+private final class FeedCachePolocy {
     private let curentDate: () -> Date
     private let calendar = Calendar(identifier: .gregorian)
-        
-    public init(store: FeedStore, curentDate: @escaping () -> Date) {
-        self.store = store
+    
+    public init(curentDate: @escaping () -> Date) {
         self.curentDate = curentDate
     }
-    
+
     private var maxCacheAgeInDays: Int {
         return 7
     }
-    private func validate(_ timestamp: Date) -> Bool {
+    
+    func validate(_ timestamp: Date) -> Bool {
         guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else { return false }
         return curentDate() < maxCacheAge
+    }
+}
+
+public final class LocalFeedLoader {
+    private let store: FeedStore
+    private let curentDate: () -> Date
+    private let cahcePolicy: FeedCachePolocy
+
+    public init(store: FeedStore, curentDate: @escaping () -> Date) {
+        self.store = store
+        self.curentDate = curentDate
+        self.cahcePolicy = FeedCachePolocy(curentDate: curentDate)
     }
 }
  
@@ -58,7 +69,7 @@ extension LocalFeedLoader: FeedLoader {
             case let .failure(error):
                 completion(.failure(error))
                 
-            case let .found(feed, timestamp) where self.validate(timestamp):
+            case let .found(feed, timestamp) where self.cahcePolicy.validate(timestamp):
                 completion(.success(feed.toModels()))
                 
             case .found, .empty:
@@ -77,7 +88,7 @@ extension LocalFeedLoader {
             case  .failure:
                 self.store.deleteCachedFeed { _ in}
                 
-            case let .found(_ , timestamp) where !self.validate(timestamp):
+            case let .found(_ , timestamp) where !self.cahcePolicy.cahcePolicy.validate(timestamp):
                 self.store.deleteCachedFeed { _ in}
 
             case .empty, .found: break
