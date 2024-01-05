@@ -142,9 +142,6 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(receivedResults.count, 0)
     }
 
-
-
-
     // MARK: - Helpers
     private func makeSUT(curentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
         let store = FeedStoreSpy()
