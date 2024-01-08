@@ -118,7 +118,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         
         let exp = expectation(description: "Wait for cache retrieval completion")
             
-        sut.retrive { retrieveResult in
+        sut.retrieve { retrieveResult in
             switch (expectedResult, retrieveResult) {
             case (.empty, .empty), (.failure, .failure):
                 break

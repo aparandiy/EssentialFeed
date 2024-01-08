@@ -44,7 +44,7 @@ public class CodableFeedStore: FeedStore {
     }
     
     //MARK: - FeedStore
-    public func retrive(completion: @escaping RetrievalCompletion) {
+    public func retrieve(completion: @escaping RetrievalCompletion) {
         let storeURL = storeURL
         queue.async {
             guard let data = try? Data(contentsOf: storeURL) else {
