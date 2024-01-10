@@ -9,11 +9,11 @@ import Foundation
 
 public final class LocalFeedLoader {
     private let store: FeedStore
-    private let curentDate: () -> Date
+    private let currentDate: () -> Date
 
-    public init(store: FeedStore, curentDate: @escaping () -> Date) {
+    public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
-        self.curentDate = curentDate
+        self.currentDate = currentDate
     }
 }
  
@@ -32,7 +32,7 @@ extension LocalFeedLoader {
     }
     
     private func cache(_ feed: [FeedImage], with completion: @escaping (SaveResult) -> ()) {
-        store.insert(feed.toLocal(), timestamp: curentDate(), completion: { [weak self] error in
+        store.insert(feed.toLocal(), timestamp: currentDate(), completion: { [weak self] error in
             guard self != nil else { return }
             completion(error)
         })
@@ -49,7 +49,7 @@ extension LocalFeedLoader: FeedLoader {
             case let .failure(error):
                 completion(.failure(error))
                 
-            case let .found(feed, timestamp) where FeedCachePolocy.validate(timestamp, against: self.curentDate()):
+            case let .found(feed, timestamp) where FeedCachePolocy.validate(timestamp, against: self.currentDate()):
                 completion(.success(feed.toModels()))
                 
             case .found, .empty:
@@ -68,7 +68,7 @@ extension LocalFeedLoader {
             case  .failure:
                 self.store.deleteCachedFeed { _ in}
                 
-            case let .found(_ , timestamp) where !FeedCachePolocy.validate(timestamp, against: self.curentDate()):
+            case let .found(_ , timestamp) where !FeedCachePolocy.validate(timestamp, against: self.currentDate()):
                 self.store.deleteCachedFeed { _ in}
 
             case .empty, .found: break
