@@ -38,7 +38,7 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let nonExpiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: 1)
-        let (sut, store) = makeSUT(curentDate: { fixedCurrentDate })
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.validateCache()
         store.completeRetrieval(with: feed.local, timestamp: nonExpiredTimestamp)
@@ -50,7 +50,7 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let expirationTimestamp = fixedCurrentDate.minusFeedCacheMaxAge()
-        let (sut, store) = makeSUT(curentDate: { fixedCurrentDate })
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.validateCache()
         store.completeRetrieval(with: feed.local, timestamp: expirationTimestamp)
@@ -62,7 +62,7 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let expiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
-        let (sut, store) = makeSUT(curentDate: { fixedCurrentDate })
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.validateCache()
         store.completeRetrieval(with: feed.local, timestamp: expiredTimestamp)
@@ -72,7 +72,7 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
 
     func test_validateCache_doesNotDeleteInvalidChacheAfterSUTInstanceHasBeenDealocated(){
         let store = FeedStoreSpy()
-        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, curentDate: Date.init)
+        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
         sut?.validateCache()
         sut = nil
@@ -82,9 +82,9 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func makeSUT(curentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
         let store = FeedStoreSpy()
-        let sut = LocalFeedLoader(store: store, curentDate: curentDate)
+        let sut = LocalFeedLoader(store: store, currentDate: currentDate)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, store)
