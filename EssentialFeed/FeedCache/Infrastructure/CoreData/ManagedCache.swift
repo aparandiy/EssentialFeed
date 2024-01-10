@@ -11,7 +11,6 @@ import CoreData
 class ManagedCache: NSManagedObject {
     @NSManaged var timestamp: Date
     @NSManaged var feed: NSOrderedSet
-    
 }
 
 extension ManagedCache {

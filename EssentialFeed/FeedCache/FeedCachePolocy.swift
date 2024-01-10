@@ -9,7 +9,7 @@ import Foundation
 
 final class FeedCachePolocy {
     
-    private init() {}
+    private init() {}//privat init prevents developer to create a new instanceof singletone
     
     private static let calendar = Calendar(identifier: .gregorian)
     
