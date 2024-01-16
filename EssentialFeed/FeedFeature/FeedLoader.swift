@@ -7,10 +7,7 @@
 
 import Foundation
 
-public enum LoadFeedResult{
-    case success([FeedImage])
-    case failure(Error)
-}
+public typealias LoadFeedResult = Result<[FeedImage], Error>
 
 ///this is an interface between UI module and concrete implementation of FeedLoader. It's like a guideline
 public protocol FeedLoader {
