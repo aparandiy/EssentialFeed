@@ -139,9 +139,7 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
             "description" : item.description,
             "location" : item.location,
             "image" : item.url.absoluteString
-        ].reduce(into: [String : Any]()) { (newDict, oldDict) in
-            if let value = oldDict.value { newDict[oldDict.key] = value }
-        }
+        ].compactMapValues { $0 }
     
         return (model: item, json: itemJson)
     }
