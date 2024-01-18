@@ -7,6 +7,12 @@
 
 import UIKit
 
+struct FeedImageViewModel {
+    let description: String?
+    let location: String?
+    let imageName: String
+}
+
 final class FeedVC: UITableViewController {
     
     //MARK: - Controller life cycle
