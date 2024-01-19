@@ -7,9 +7,18 @@
 
 import XCTest
 
-final class FeedVC {
-    init(loader: FeedVCTests.LoaderSpy) {
+final class FeedVC: UIViewController {
+    private var loader: FeedVCTests.LoaderSpy?
 
+    convenience init(loader: FeedVCTests.LoaderSpy) {
+        self.init()
+        self.loader = loader
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        loader?.load()
     }
 }
 
@@ -25,5 +34,9 @@ final class FeedVCTests: XCTestCase {
     // MARK: - Helpers
     class LoaderSpy {
         private(set) var loadCallCount: Int = 0
+        
+        func load() {
+            loadCallCount += 1
+        }
     }
 }
