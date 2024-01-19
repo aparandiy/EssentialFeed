@@ -29,7 +29,7 @@ public final class RemoteFeedLoader: FeedLoader {//final tag prevents of subclas
             guard self != nil else { return }
             
             switch result {
-            case let .success(data, response):
+            case let .success((data, response)):
                 completion(RemoteFeedLoader.map(data, response: response))
             case .failure:
                 completion(.failure(Error.connectivity))
