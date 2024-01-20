@@ -34,15 +34,13 @@ final public class FeedVC: UITableViewController {
         loader?.load { [weak self] result in
             self?.refreshControl?.endRefreshing()
 
-            self?.tableModel = (try? result.get()) ?? []
-            self?.tableView.reloadData()
-//            switch result {
-//            case let .success(feed):
-//                self?.tableModel = feed
-//            case let .failure(error):
-//                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-//                self?.present(alert, animated: true)
-//            }
+            switch result {
+            case let .success(feed):
+                self?.tableModel = feed
+                self?.tableView.reloadData()
+            case .failure:
+                break
+            }
         }
     }
     
