@@ -67,6 +67,8 @@ final public class FeedVC: UITableViewController {
         cell.feedImageView.image = nil
         cell.feedImageRetryButton.isHidden = true
         cell.feedImageContainer.startShimmering()
+        cell.onRetry = loadImage(for: cell, at: indexPath, cellModel: cellModel)
+
         return cell
     }
     
@@ -74,7 +76,22 @@ final public class FeedVC: UITableViewController {
     public override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? FeedImageCell {
             let cellModel = tableModel[indexPath.row]
-            tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) { [weak cell] result in
+            loadImage(for: cell, at: indexPath, cellModel: cellModel)()
+        }
+    }
+
+    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        tasks[indexPath]?.cancel()
+        tasks[indexPath] = nil
+    }
+    
+    //MARK: - API call
+    @discardableResult
+    func loadImage(for cell: FeedImageCell, at indexPath: IndexPath, cellModel: FeedImage) -> (()->(Void)) {
+        let loadImage = { [weak self, weak cell] in
+            guard let self = self else { return }
+
+            self.tasks[indexPath] = self.imageLoader?.loadImageData(from: cellModel.url) { [weak cell] result in
                 let data = try? result.get()
                 let image = data.map(UIImage.init) ?? nil
                 cell?.feedImageView.image = image
@@ -82,10 +99,6 @@ final public class FeedVC: UITableViewController {
                 cell?.feedImageContainer.stopShimmering()
             }
         }
-    }
-
-    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        tasks[indexPath]?.cancel()
-        tasks[indexPath] = nil
+        return loadImage
     }
 }
