@@ -64,6 +64,7 @@ final public class FeedVC: UITableViewController {
         cell.locationContainer.isHidden = (cellModel.location == nil)
         cell.locationLabel.text = cellModel.location
         cell.descriptionLabel.text = cellModel.description
+        cell.feedImageView.image = nil
         cell.feedImageContainer.startShimmering()
         return cell
     }
@@ -72,6 +73,8 @@ final public class FeedVC: UITableViewController {
     public override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cellModel = tableModel[indexPath.row]
         tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) { [weak cell] result in
+            let data = try? result.get()
+            (cell as? FeedImageCell)?.feedImageView.image = data.map(UIImage.init) ?? nil
             (cell as? FeedImageCell)?.feedImageContainer.stopShimmering()
         }
     }
