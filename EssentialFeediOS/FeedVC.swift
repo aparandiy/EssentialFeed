@@ -65,17 +65,21 @@ final public class FeedVC: UITableViewController {
         cell.locationLabel.text = cellModel.location
         cell.descriptionLabel.text = cellModel.description
         cell.feedImageView.image = nil
+        cell.feedImageRetryButton.isHidden = true
         cell.feedImageContainer.startShimmering()
         return cell
     }
     
     //MARK: - UITableViewDelegate
     public override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cellModel = tableModel[indexPath.row]
-        tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) { [weak cell] result in
-            let data = try? result.get()
-            (cell as? FeedImageCell)?.feedImageView.image = data.map(UIImage.init) ?? nil
-            (cell as? FeedImageCell)?.feedImageContainer.stopShimmering()
+        if let cell = cell as? FeedImageCell {
+            let cellModel = tableModel[indexPath.row]
+            tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) { [weak cell] result in
+                let data = try? result.get()
+                cell?.feedImageView.image = data.map(UIImage.init) ?? nil
+                cell?.feedImageContainer.stopShimmering()
+                cell?.feedImageRetryButton.isHidden = (data != nil)
+            }
         }
     }
 
