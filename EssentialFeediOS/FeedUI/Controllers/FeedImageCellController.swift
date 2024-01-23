@@ -32,9 +32,8 @@ final class FeedImageCellController {
         loadImage()
         return cell
     }
-    
+        
     //MARK: - API call
-//    @discardableResult
     func loadImage(for cell: FeedImageCell) -> (()->(Void)) {
         
         let loadImage = { [weak self, weak cell] in
@@ -54,9 +53,8 @@ final class FeedImageCellController {
     func preload() {
         task = imageLoader.loadImageData(from: model.url) { _ in }
     }
-
-    deinit {
+    
+    func cancelLoad() {
         task?.cancel()
     }
-
 }
