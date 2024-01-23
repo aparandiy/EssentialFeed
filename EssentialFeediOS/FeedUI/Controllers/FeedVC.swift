@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import EssentialFeed
-
 
 public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetching {
     public var refreshController: FeedRefreshController?
@@ -61,7 +59,6 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     
     //MARK: - Helpers
     private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-//        cellControllers[indexPath] = nil
         tableModel[indexPath.row].cancelLoad()
     }
     
