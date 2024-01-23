@@ -8,6 +8,8 @@
 import UIKit
 
 public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetching {
+    
+    //MARK: - Properties
     public var refreshController: FeedRefreshController?
     var tableModel = [FeedImageCellController]() {
         didSet {
@@ -15,11 +17,13 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
         }
     }
     
+    //MARK: - Init
     convenience init(refreshController: FeedRefreshController) {
         self.init()
         self.refreshController = refreshController
     }
     
+    //MARK: - Controller life cycle
     public override func viewDidLoad() {
         super.viewDidLoad()
         
