@@ -21,8 +21,8 @@ public class FeedRefreshController: NSObject {
     }
     
     private func binded(_ view: UIRefreshControl) -> UIRefreshControl {
-        viewModel.onChange = { [weak self] viewModel in
-            if viewModel.isLoading == true {
+        viewModel.onLoadingStateChange = { [weak self] isLoading in
+            if isLoading {
                 self?.refreshControl.beginRefreshing()
             } else {
                 self?.refreshControl.endRefreshing()
