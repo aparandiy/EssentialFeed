@@ -280,7 +280,7 @@ final class FeedVCTests: XCTestCase {
     }
 }
 
-private extension UITableViewController {
+private extension FeedVC {
     func replaceRefreshControlWithFake() {
         let fake = FakeRefreshControl()
         refreshControl?.allTargets.forEach { target in
@@ -290,6 +290,15 @@ private extension UITableViewController {
         }
         
         self.refreshControl = fake
+        
+        feedRefreshControl?.refreshIndicator.allTargets.forEach { target in
+            feedRefreshControl?.refreshIndicator.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
+                fake.addTarget(target, action: Selector(action), for: .valueChanged)
+            }
+        }
+        
+        feedRefreshControl?.refreshIndicator = fake
+
     }
 }
 
