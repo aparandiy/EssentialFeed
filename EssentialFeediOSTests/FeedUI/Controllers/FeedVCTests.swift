@@ -268,7 +268,7 @@ final class FeedVCTests: XCTestCase {
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedVC, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedVC(feedLoader: loader, imageLoader: loader)
+        let sut = FeedUIComposer.feedComposedWith(feedLoader: loader, imageLoader: loader)
         sut.replaceRefreshControlWithFake()
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)

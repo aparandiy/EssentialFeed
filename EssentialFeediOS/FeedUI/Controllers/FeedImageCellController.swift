@@ -57,4 +57,8 @@ final class FeedImageCellController {
     func preload() {
         self.task = self.imageLoader.loadImageData(from: self.model.url) { _ in }
     }
+    
+    func cancelLoad() {
+        self.task?.cancel()
+    }
 }
