@@ -8,12 +8,19 @@
 import Foundation
 import EssentialFeed
 
-protocol FeedLoadingView {
-    func display(isLoading: Bool)
+struct FeedLoadingVM {
+    let isLoading: Bool
 }
 
+protocol FeedLoadingView {
+    func display(_ viewModel: FeedLoadingVM)
+}
+
+struct FeedVM {
+    let feed: [FeedImage]
+}
 protocol FeedView {
-    func display(feed: [FeedImage])
+    func display(_ viewModel: FeedVM)
 }
 
 final class FeedPresenter {
@@ -27,12 +34,12 @@ final class FeedPresenter {
     var feedLoadingView: FeedLoadingView?
     
     func loadFeed() {
-        feedLoadingView?.display(isLoading: true)
+        feedLoadingView?.display(FeedLoadingVM(isLoading: true))
         feedLoader.load { [weak self] result in
             if let feed = try? result.get() {
-                self?.feedView?.display(feed: feed)
+                self?.feedView?.display(FeedVM(feed: feed))
             }
-            self?.feedLoadingView?.display(isLoading: false)
+            self?.feedLoadingView?.display(FeedLoadingVM(isLoading: false))
         }
     }
 }
