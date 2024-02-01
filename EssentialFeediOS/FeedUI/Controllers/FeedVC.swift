@@ -42,7 +42,7 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableModel[indexPath.row].cell()
+        return tableModel[indexPath.row].view()
     }
     
     //MARK: - UITableViewDelegate
