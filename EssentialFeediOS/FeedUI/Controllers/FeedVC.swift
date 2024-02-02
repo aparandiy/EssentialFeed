@@ -17,11 +17,11 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
         }
     }
     
-    //MARK: - Init
-    convenience init(refreshController: FeedRefreshController) {
-        self.init()
-        self.refreshController = refreshController
-    }
+//    //MARK: - Init
+//    convenience init(refreshController: FeedRefreshController) {
+//        self.init()
+//        self.refreshController = refreshController
+//    }
     
     //MARK: - Controller life cycle
     public override func viewDidLoad() {
