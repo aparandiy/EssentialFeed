@@ -408,6 +408,7 @@
 				B799DADE2B5A923A004A2F38 /* EssentialFeediOS.h */,
 				B799DADF2B5A923A004A2F38 /* EssentialFeediOS.docc */,
 				B79C465A2B5ECCD00085E02F /* Feed Image Loader */,
+				B76CEB952B615149009F58CC /* Feed Presentation */,
 				B79C46542B5ECA940085E02F /* FeedUI */,
 			);
 			path = EssentialFeediOS;
@@ -483,7 +484,6 @@
 		B79C46542B5ECA940085E02F /* FeedUI */ = {
 			isa = PBXGroup;
 			children = (
-				B76CEB952B615149009F58CC /* Feed Presentation */,
 				B7D2D5E92B600B2900911CF6 /* Composers */,
 				B79C46482B5EC5C00085E02F /* Controllers */,
 				B79C46472B5EC5AC0085E02F /* Views */,
