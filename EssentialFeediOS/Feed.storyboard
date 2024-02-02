@@ -77,6 +77,9 @@
                                                             <state key="normal" title="⟳">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="RKt-Yd-obp" eventType="touchUpInside" id="S0L-8W-Mvp"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.89019607840000003" green="0.89019607840000003" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -117,6 +120,13 @@
                                         <constraint firstItem="0Lx-4P-3aP" firstAttribute="leading" secondItem="Bz8-JV-eAn" secondAttribute="leadingMargin" id="wQ6-i1-wZB"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="e1v-7E-THl" id="qKq-Zh-a0d"/>
+                                    <outlet property="feedImageContainer" destination="2s9-6K-Zrh" id="UkJ-8a-e88"/>
+                                    <outlet property="feedImageView" destination="pvB-qy-jYy" id="HGx-St-MoN"/>
+                                    <outlet property="locationContainer" destination="Yqh-gh-xgp" id="Oy9-Si-W8w"/>
+                                    <outlet property="locationLabel" destination="YJ3-BQ-4oU" id="SFY-w9-HhR"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
