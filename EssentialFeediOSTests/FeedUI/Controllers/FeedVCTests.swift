@@ -291,13 +291,13 @@ private extension FeedVC {
         
         self.refreshControl = fake
 
-        refreshController?.refreshControl.allTargets.forEach { target in
-            refreshController?.refreshControl.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
-                fake.addTarget(target, action: Selector(action), for: .valueChanged)
-            }
-        }
-
-        refreshController?.refreshControl = fake
+//        refreshController?.refreshControl.allTargets.forEach { target in
+//            refreshController?.refreshControl.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
+//                fake.addTarget(target, action: Selector(action), for: .valueChanged)
+//            }
+//        }
+//
+//        refreshController?.refreshControl = fake
             
     }
 }

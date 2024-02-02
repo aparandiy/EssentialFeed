@@ -7,21 +7,20 @@
 
 import UIKit
 
-public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetching {
+protocol FeedVCDelegate {
+    func didRequestFeedRefresh()
+}
+
+public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView {
     
     //MARK: - Properties
-    @IBOutlet public var refreshController: FeedRefreshController!
+    var delegate: FeedVCDelegate?
+    
     var tableModel = [FeedImageCellController]() {
         didSet {
             tableView.reloadData()
         }
     }
-    
-//    //MARK: - Init
-//    convenience init(refreshController: FeedRefreshController) {
-//        self.init()
-//        self.refreshController = refreshController
-//    }
     
     //MARK: - Controller life cycle
     public override func viewDidLoad() {
@@ -32,7 +31,12 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     
     public override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
-        refreshController?.refresh()
+        refresh()
+    }
+    
+    //MARK: - RefreshControl action
+    @IBAction private func refresh() {
+        delegate?.didRequestFeedRefresh()
     }
         
     //MARK: - UITableViewDatasource
@@ -68,4 +72,14 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     private func cellController(forRowAt indexPath: IndexPath) -> FeedImageCellController {
         return tableModel[indexPath.row]
     }
+    
+    //MARK: - FeedLoadingView
+    func display(_ viewModel: FeedLoadingVM) {
+        if viewModel.isLoading {
+            refreshControl?.beginRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
+        }
+    }
+
 }
