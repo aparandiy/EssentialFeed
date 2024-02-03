@@ -26,7 +26,7 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "My Feed"
+        title = FeedPresenter.title
     }
     
     public override func viewIsAppearing(_ animated: Bool) {
