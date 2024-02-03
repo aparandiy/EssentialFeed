@@ -5,7 +5,6 @@
 //  Created by Andrij Parandij on 03.02.2024.
 //
 
-import Foundation
 import EssentialFeed
 
 final class MainQueueDispatchDecorator<T> {
