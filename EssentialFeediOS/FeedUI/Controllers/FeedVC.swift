@@ -25,8 +25,6 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     //MARK: - Controller life cycle
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        title = FeedPresenter.title
     }
     
     public override func viewIsAppearing(_ animated: Bool) {
