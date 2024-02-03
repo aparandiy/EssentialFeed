@@ -17,7 +17,11 @@ public final class FeedUIComposer {
             MainQueueDispatchDecorator(decoratee: feedLoader))
 
         let feedVC = FeedVC.makeWith(delegate: presentationAdapter, title: "My Feed")
-        presentationAdapter.presenter = FeedPresenter(feedView: FeedViewAdapter(controller: feedVC, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(feedVC))
+        presentationAdapter.presenter = FeedPresenter(feedView: 
+                                                        FeedViewAdapter(
+                                                            controller: feedVC,
+                                                            imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)),
+                                                      loadingView: WeakRefVirtualProxy(feedVC))
 
         return feedVC
     }
@@ -35,6 +39,13 @@ private final class MainQueueDispatchDecorator<T> {
             return DispatchQueue.main.async(execute: completion)
         }
         completion()
+    }
+}
+extension MainQueueDispatchDecorator: FeedImageDataLoader where T == FeedImageDataLoader {
+    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+        return decoratee.loadImageData(from: url) { [weak self] result in
+            self?.dispatch { completion(result) }
+        }
     }
 }
 
