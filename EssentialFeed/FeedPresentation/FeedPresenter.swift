@@ -5,9 +5,6 @@
 //  Created by Andrij Parandij on 12.02.2024.
 //
 
-public struct FeedVM {
-    public let feed: [FeedImage]
-}
 
 public protocol FeedView {
     func display(_ viewModel: FeedVM)
