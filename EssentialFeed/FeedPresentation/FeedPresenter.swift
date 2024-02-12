@@ -10,10 +10,6 @@ public protocol FeedView {
     func display(_ viewModel: FeedVM)
 }
 
-public struct FeedLoadingVM {
-    public let isLoading: Bool
-}
-
 public protocol FeedLoadingView {
     func display(_ viewModel: FeedLoadingVM)
 }
