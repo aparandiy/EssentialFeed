@@ -20,7 +20,7 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     
     //MARK: - Properties
     var delegate: FeedVCDelegate?
-    public let errorView = ErrorView()
+    @IBOutlet private(set) public var errorView: ErrorView?
 
     var tableModel = [FeedImageCellController]() {
         didSet {
@@ -88,7 +88,7 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     
     //MARK: - FeedErrorView
     public func display(_ viewModel: FeedErrorVM) {
-        errorView.message = viewModel.message
+        errorView?.message = viewModel.message
     }
 
 }
