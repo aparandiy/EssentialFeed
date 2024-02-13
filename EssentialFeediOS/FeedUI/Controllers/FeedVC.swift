@@ -75,11 +75,7 @@ public final class FeedVC: UITableViewController, UITableViewDataSourcePrefetchi
     
     //MARK: - FeedLoadingView
     public func display(_ viewModel: FeedLoadingVM) {
-        if viewModel.isLoading {
-            refreshControl?.beginRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
-        }
+        refreshControl?.update(isRefreshing: viewModel.isLoading)
     }
     
     //MARK: - FeedErrorView
