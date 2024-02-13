@@ -18,7 +18,24 @@
                         <view key="tableHeaderView" contentMode="scaleToFill" id="ZwM-Nz-gri" customClass="ErrorView" customModule="EssentialFeediOS" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="393" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F7l-jA-ptw">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="34"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
                             <color key="backgroundColor" systemColor="systemRedColor"/>
+                            <constraints>
+                                <constraint firstItem="F7l-jA-ptw" firstAttribute="top" secondItem="ZwM-Nz-gri" secondAttribute="top" id="1ha-NW-Nmz"/>
+                                <constraint firstAttribute="bottom" secondItem="F7l-jA-ptw" secondAttribute="bottom" id="hrl-R0-aB0"/>
+                                <constraint firstAttribute="trailing" secondItem="F7l-jA-ptw" secondAttribute="trailing" id="kbm-xC-8Uk"/>
+                                <constraint firstItem="F7l-jA-ptw" firstAttribute="leading" secondItem="ZwM-Nz-gri" secondAttribute="leading" id="pWH-VI-2iD"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="label" destination="F7l-jA-ptw" id="gNN-6N-fTt"/>
+                            </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="wrW-Km-1Td">
                             <rect key="frame" x="0.0" y="578" width="393" height="16"/>
