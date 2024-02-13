@@ -40,6 +40,10 @@ extension FeedVC {
         return view
     }
     
+    var errorMessage: String? {
+        return errorView.message
+    }
+    
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
     }
